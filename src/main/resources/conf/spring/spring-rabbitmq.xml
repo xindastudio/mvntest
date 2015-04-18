@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
+		http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-4.0.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+		http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa-1.3.xsd"
+	default-lazy-init="false">
+
+	<description>RabbitMQ配置</description>
+
+	<bean
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="IgnoreUnresolvablePlaceholders" value="true" />
+		<property name="locations">
+			<list>
+				<value>classpath:conf/rabbitmq.properties</value>
+			</list>
+		</property>
+	</bean>
+	<bean id="connectionFactory" class="com.rabbitmq.client.ConnectionFactory">
+		<property name="numConsumerThreads" value="${rabbitmq.numConsumerThreads}" />
+		<property name="host" value="${rabbitmq.host}" />
+		<property name="username" value="${rabbitmq.username}" />
+		<property name="password" value="${rabbitmq.password}" />
+		<property name="virtualHost" value="${rabbitmq.virtualHost}" />
+		<property name="uri" value="${rabbitmq.uri}" />
+		<property name="uri" value="${rabbitmq.uri}" />
+		<property name="requestedChannelMax" value="${rabbitmq.requestedChannelMax}" />
+		<property name="requestedFrameMax" value="${rabbitmq.requestedFrameMax}" />
+		<property name="connectionTimeout" value="${rabbitmq.connectionTimeout}" />
+		<property name="shutdownTimeout" value="${rabbitmq.shutdownTimeout}" />
+		<property name="requestedHeartbeat" value="${rabbitmq.requestedHeartbeat}" />
+		<property name="clientProperties" value="${rabbitmq.clientProperties}" />
+		<property name="saslConfig" value="${rabbitmq.saslConfig}" />
+		<property name="socketConfigurator" value="${rabbitmq.socketConfigurator}" />
+		<property name="sharedExecutor" value="${rabbitmq.sharedExecutor}" />
+		<property name="threadFactory" value="${rabbitmq.threadFactory}" />
+		<property name="exceptionHandler" value="${rabbitmq.exceptionHandler}" />
+		<property name="automaticRecoveryEnabled" value="${rabbitmq.automaticRecoveryEnabled}" />
+		<property name="topologyRecoveryEnabled" value="${rabbitmq.topologyRecoveryEnabled}" />
+		<property name="networkRecoveryInterval" value="${rabbitmq.networkRecoveryInterval}" />
+		<property name="networkRecoveryInterval" value="${rabbitmq.networkRecoveryInterval}" />
+		<property name="socketFactory" value="${rabbitmq.socketFactory}" />
+		<property name="port" value="${rabbitmq.port}" />
+	</bean>
+	<bean id="memCachedClient" class="com.danga.MemCached.MemCachedClient">
+		<constructor-arg index="0" value="${memCached.poolName}" />
+	</bean>
+</beans>

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace必须指向Dao接口 -->
+<mapper namespace="bestv.bims.station.dao.StationDao">
+
+	<!-- 插入平台：由数据库生成id并赋值到Station对象的id属性 -->
+	<insert id="save" parameterType="Station" useGeneratedKeys="true" keyProperty="id">
+		insert into CBIMS_STATION
+		(name, code, status, business, order_syn_url, order_back_url)
+		values
+		(#{name}, #{code}, #{status}, #{business}, #{orderSynUrl}, #{orderBackUrl})
+	</insert>
+
+	<!-- 根据id删除平台 -->
+	<delete id="delete" parameterType="Station">
+		delete from CBIMS_STATION where id=#{id}
+	</delete>
+	<!-- 批量删除平台 -->
+	<delete id="deleteList" parameterType="StationQuery">
+		delete from CBIMS_STATION
+		<where>
+			<if test="name != null">name=#{name}</if>
+			<if test="code != null">code=#{code}</if>
+			<if test="status != null">status=#{status}</if>
+			<if test="business != null">business=#{business}</if>
+		</where>
+	</delete>
+
+	<update id="update" parameterType="Station">
+		update CBIMS_STATION
+		set
+		name=#{name},
+		code=#{code},
+		status=#{status},
+		business=#{business},
+		order_syn_url=#{orderSynUrl},
+		order_back_url=#{orderBackUrl}
+		where id=#{id}
+	</update>
+
+	<!-- 根据id查询平台:输出直接映射到对象,表字段名与对象属性名不一致的情况要用"字段名 as 属性名"以方便映射  -->
+	<select id="find" parameterType="Station" resultType="Station">
+		select
+		id,
+		name as name,
+		code as code,
+		status as status,
+		business as business,
+		order_syn_url as orderSynUrl,
+		order_back_url as orderBackUrl
+		from
+		CBIMS_STATION
+		where
+		id=#{id}
+	</select>
+	<!-- 批量查询平台:<where>语句智能添加where和and关键字,输出直接映射对象 -->
+	<select id="findList" parameterType="StationQuery" resultType="Station">
+		select
+		id,
+		name as name,
+		code as code,
+		status as status,
+		business as business,
+		order_syn_url as orderSynUrl,
+		order_back_url as orderBackUrl
+		from
+		CBIMS_STATION
+		<where>
+			<if test="name != null">name=#{name}</if>
+			<if test="code != null">code=#{code}</if>
+			<if test="status != null">status=#{status}</if>
+			<if test="business != null">business=#{business}</if>
+		</where>
+	</select>
+</mapper> 

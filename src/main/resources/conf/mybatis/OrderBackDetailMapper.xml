@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace必须指向Dao接口 -->
+<mapper namespace="bestv.bims.station.dao.OrderBackDetailDao">
+
+	<!-- 插入订购回退详细：由数据库生成id并赋值到OrderBackDetail对象的id属性 -->
+	<insert id="save" parameterType="OrderBackDetail" useGeneratedKeys="true" keyProperty="id">
+		insert into CBIMS_ORDER_BACK_DETAIL
+		(order_info_id, station_code, user_id, status, create_time, update_time, product_code, order_product, order_id, version)
+		values
+		(#{orderInfoId}, #{stationCode}, #{userId}, #{status}, now(), now(), #{productCode}, #{orderProduct}, #{orderId}, #{version})
+	</insert>
+
+	<!-- 根据id删除订购回退详细 -->
+	<delete id="delete" parameterType="OrderBackDetail">
+		delete from CBIMS_ORDER_BACK_DETAIL where id=#{id}
+	</delete>
+	<!-- 批量删除订购回退详细 -->
+	<delete id="deleteList" parameterType="OrderBackDetailQuery">
+		delete from CBIMS_ORDER_BACK_DETAIL
+		<where>
+			<if test="orderInfoId != null">order_info_id=#{orderInfoId}</if>
+			<if test="stationCode != null">station_code=#{stationCode}</if>
+			<if test="userId != null">user_id=#{userId}</if>
+			<if test="status != null">status=#{status}</if>
+			<if test="resultCode != null">result_code=#{resultCode}</if>
+		</where>
+	</delete>
+
+	<update id="update" parameterType="OrderBackDetail">
+		update CBIMS_ORDER_BACK_DETAIL
+		set
+		order_info_id=#{orderInfoId},
+		station_code=#{stationCode},
+		user_id=#{userId},
+		status=#{status},
+		result_code=#{resultCode},
+		result_desc=#{resultDesc},
+		update_time=now(),
+		product_code=#{productCode},
+		order_product=#{orderProduct},
+		order_id=#{orderId},
+		retry=#{retry},
+		version=#{version},
+		serial_no=#{serialNo}
+		where id=#{id}
+	</update>
+	<update id="updateStatus" parameterType="OrderBackDetail">
+		update CBIMS_ORDER_BACK_DETAIL
+		set
+		status=#{status},
+		result_code=#{resultCode},
+		result_desc=#{resultDesc},
+		update_time=now(),
+		retry=#{retry},
+		serial_no=#{serialNo}
+		where id=#{id}
+	</update>
+
+	<!-- 根据id查询订购回退详细:输出直接映射到对象,表字段名与对象属性名不一致的情况要用"字段名 as 属性名"以方便映射  -->
+	<select id="find" parameterType="OrderBackDetail" resultType="OrderBackDetail">
+		select
+		id,
+		order_info_id as orderInfoId,
+		station_code as stationCode,
+		user_id as userId,
+		status,
+		result_code as resultCode,
+		result_desc as resultDesc,
+		create_time as createTime,
+		update_time as updateTime,
+		product_code as productCode,
+		order_product as orderProduct,
+		order_id as orderId,
+		retry,
+		version,
+		serial_no as serialNo
+		from
+		CBIMS_ORDER_BACK_DETAIL
+		where
+		id=#{id}
+	</select>
+	<!-- 批量查询订购回退详细:<where>语句智能添加where和and关键字,输出直接映射对象 -->
+	<select id="findList" parameterType="OrderBackDetailQuery" resultType="OrderBackDetail">
+		select
+		id,
+		order_info_id as orderInfoId,
+		station_code as stationCode,
+		user_id as userId,
+		status,
+		result_code as resultCode,
+		result_desc as resultDesc,
+		create_time as createTime,
+		update_time as updateTime,
+		product_code as productCode,
+		order_product as orderProduct,
+		order_id as orderId,
+		retry,
+		version,
+		serial_no as serialNo
+		from
+		CBIMS_ORDER_BACK_DETAIL
+		<where>
+			<if test="orderInfoId != null">order_info_id=#{orderInfoId}</if>
+			<if test="stationCode != null">station_code=#{stationCode}</if>
+			<if test="userId != null">user_id=#{userId}</if>
+			<if test="status != null">status=#{status}</if>
+			<if test="resultCode != null">result_code=#{resultCode}</if>
+		</where>
+		<if test="pageSize != null">limit #{pageSize}</if>
+	</select>
+</mapper> 

@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace必须指向Dao接口 -->
+<mapper namespace="bestv.bims.station.dao.OrderInfoDao">
+
+	<!-- 插入订购信息：由数据库生成id并赋值到OrderInfo对象的id属性 -->
+	<insert id="save" parameterType="OrderInfo" useGeneratedKeys="true" keyProperty="id">
+		insert into CBIMS_ORDER_INFO
+		(oper_station_code, oper_user_id, station_user, order_product, subscribe_time, order_type, fee, valid_time, expired_time, content_code, content_name, product_code, product_name, order_id, update_time, order_valid, unsubscribe_time, order_extend, version, serial_no, status, result_code, result_desc, info_create_time, info_update_time, need_syn_count, syn_suc_count, syn_fail_count, syn_cancel_count, need_back_count, back_suc_count, back_fail_count, need_bsyn_count, bsyn_suc_count, bsyn_fail_count)
+		values
+		(#{operStationCode}, #{operUserId}, #{stationUser}, #{orderProduct}, #{subscribeTime}, #{orderType}, #{fee}, #{validTime}, #{expiredTime}, #{contentCode}, #{contentName}, #{productCode}, #{productName}, #{orderId}, #{updateTime}, #{orderValid}, #{unsubscribeTime}, #{orderExtend}, #{version}, #{serialNo}, #{status}, #{resultCode}, #{resultDesc}, now(), now(), #{needSynCount}, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+	</insert>
+
+	<!-- 根据id删除订购信息 -->
+	<delete id="delete" parameterType="OrderInfo">
+		delete from CBIMS_ORDER_INFO where id=#{id}
+	</delete>
+	<!-- 批量删除订购信息 -->
+	<delete id="deleteList" parameterType="OrderInfoQuery">
+		delete from CBIMS_ORDER_INFO
+		<where>
+			<if test="orderId != null">order_id=#{orderId}</if>
+			<if test="status != null">status=#{status}</if>
+			<if test="resultCode != null">result_code=#{resultCode}</if>
+		</where>
+	</delete>
+
+	<update id="update" parameterType="OrderInfo">
+		update CBIMS_ORDER_INFO
+		set
+		status=#{status},
+		result_code=#{resultCode},
+		result_desc=#{resultDesc},
+		info_update_time=now()
+		where id=#{id}
+	</update>
+	<update id="updateStatus" parameterType="OrderInfo">
+		update CBIMS_ORDER_INFO
+		set
+		status=#{status},
+		result_code=#{resultCode},
+		result_desc=#{resultDesc},
+		info_update_time=now()
+		where id=#{id}
+	</update>
+	<update id="updateCount" parameterType="OrderInfo">
+		update CBIMS_ORDER_INFO
+		set
+		<if test="needSynCount != null">need_syn_count=#{needSynCount},</if>
+		<if test="synSucCount != null">syn_suc_count=#{synSucCount},</if>
+		<if test="synFailCount != null">syn_fail_count=#{synFailCount},</if>
+		<if test="synCancelCount != null">syn_cancel_count=#{synCancelCount},</if>
+		<if test="needBackCount != null">need_back_count=#{needBackCount},</if>
+		<if test="backSucCount != null">back_suc_count=#{backSucCount},</if>
+		<if test="backFailCount != null">back_fail_count=#{backFailCount},</if>
+		<if test="needBsynCount != null">need_bsyn_count=#{needBsynCount},</if>
+		<if test="bsynSucCount != null">bsyn_suc_count=#{bsynSucCount},</if>
+		<if test="bsynFailCount != null">bsyn_fail_count=#{bsynFailCount},</if>
+		info_update_time=now()
+		where id=#{id}
+	</update>
+	<update id="updateStatusOnly" parameterType="OrderInfo">
+		update CBIMS_ORDER_INFO
+		set
+		status=#{status},
+		info_update_time=now()
+		where id=#{id}
+	</update>
+
+	<!-- 根据id查询订购信息:输出直接映射到对象,表字段名与对象属性名不一致的情况要用"字段名 as 属性名"以方便映射  -->
+	<select id="find" parameterType="OrderInfo" resultType="OrderInfo">
+		select
+		id,
+		oper_station_code as operStationCode,
+		oper_user_id as operUserId,
+		station_user as stationUser,
+		order_product as orderProduct,
+		subscribe_time as subscribeTime,
+		order_type as orderType,
+		fee as fee,
+		valid_time as validTime,
+		expired_time as expiredTime,
+		content_code as contentCode,
+		content_name as contentName,
+		product_code as productCode,
+		product_name as productName,
+		order_id as orderId,
+		update_time as updateTime,
+		order_valid as orderValid,
+		unsubscribe_time as unsubscribeTime,
+		order_extend as orderExtend,
+		version as version,
+		serial_no as serialNo,
+		status as status,
+		result_code as resultCode,
+		result_desc as resultDesc,
+		info_create_time as infoCreateTime,
+		info_update_time as infoUpdateTime,
+		need_syn_count as needSynCount,
+		syn_suc_count as synSucCount,
+		syn_fail_count as synFailCount,
+		syn_cancel_count as synCancelCount,
+		need_back_count as needBackCount,
+		back_suc_count as backSucCount,
+		back_fail_count as backFailCount,
+		need_bsyn_count as needBsynCount,
+		bsyn_suc_count as bsynSucCount,
+		bsyn_fail_count as bsynFailCount
+		from
+		CBIMS_ORDER_INFO
+		where
+		id=#{id}
+	</select>
+	<!-- 批量查询订购信息:<where>语句智能添加where和and关键字,输出直接映射对象 -->
+	<select id="findList" parameterType="OrderInfoQuery" resultType="OrderInfo">
+		select
+		id,
+		oper_station_code as operStationCode,
+		oper_user_id as operUserId,
+		station_user as stationUser,
+		order_product as orderProduct,
+		subscribe_time as subscribeTime,
+		order_type as orderType,
+		fee as fee,
+		valid_time as validTime,
+		expired_time as expiredTime,
+		content_code as contentCode,
+		content_name as contentName,
+		product_code as productCode,
+		product_name as productName,
+		order_id as orderId,
+		update_time as updateTime,
+		order_valid as orderValid,
+		unsubscribe_time as unsubscribeTime,
+		order_extend as orderExtend,
+		version as version,
+		serial_no as serialNo,
+		status as status,
+		result_code as resultCode,
+		result_desc as resultDesc,
+		info_create_time as infoCreateTime,
+		info_update_time as infoUpdateTime,
+		need_syn_count as needSynCount,
+		syn_suc_count as synSucCount,
+		syn_fail_count as synFailCount,
+		syn_cancel_count as synCancelCount,
+		need_back_count as needBackCount,
+		back_suc_count as backSucCount,
+		back_fail_count as backFailCount,
+		need_bsyn_count as needBsynCount,
+		bsyn_suc_count as bsynSucCount,
+		bsyn_fail_count as bsynFailCount
+		from
+		CBIMS_ORDER_INFO
+		<where>
+			<if test="orderId != null">order_id=#{orderId}</if>
+			<if test="status != null">status=#{status}</if>
+			<if test="resultCode != null">result_code=#{resultCode}</if>
+		</where>
+		<if test="pageSize != null">limit #{pageSize}</if>
+	</select>
+</mapper> 

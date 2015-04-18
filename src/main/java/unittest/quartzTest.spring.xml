@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+
+<beans default-lazy-init="false">
+
+	<!-- ODS统计数据上传 -->
+	<bean name="odsReportUploadTask" class="QuartzTest">
+	</bean>
+	<bean id="odsReportGeneratorTaskJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="odsReportUploadTask" />
+		<property name="targetMethod" value="start1" />
+		<property name="concurrent" value="false"/>
+	</bean>
+	<bean id="odsReportUploadTaskJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="odsReportUploadTask" />
+		<property name="targetMethod" value="start2" />
+		<property name="concurrent" value="false"/>
+	</bean>
+	<bean id="odsReportGeneratorTaskTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="odsReportGeneratorTaskJobDetail" />
+		<property name="cronExpression">
+			<value>0/1 * * * * ? *</value>
+		</property>
+	</bean>
+	<bean id="odsReportUploadTaskTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="odsReportUploadTaskJobDetail" />
+		<property name="cronExpression">
+			<value>0/1 * * * * ? *</value>
+		</property>
+	</bean>
+	<bean id="odsReportUploadTaskSchedule" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="schedulerName">
+			<value>taskSchedule</value>
+		</property>
+		<property name="triggers">
+			<list>
+				<ref bean="odsReportGeneratorTaskTrigger"/>	
+				<ref bean="odsReportUploadTaskTrigger"/>			
+			</list>
+		</property>
+		<property name="autoStartup">
+			<value>false</value>
+		</property>
+	</bean>
+	<!-- ODS数据统计  -->
+	<bean name="odsReportStatTask"
+		class="QuartzTest">
+	</bean>
+	<bean id="odsReportStatTaskJobDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="odsReportStatTask" />
+		<property name="targetMethod" value="start3" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<bean id="odsReportStatTaskTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="odsReportStatTaskJobDetail" />
+		<property name="cronExpression">
+			<value>0/1 * * * * ? *</value>
+		</property>
+	</bean>
+
+	<bean id="odsReportStatTaskSchedule"
+		class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="schedulerName">
+			<value>taskSchedule</value>
+		</property>
+		<property name="triggers">
+			<list>
+				<ref bean="odsReportStatTaskTrigger" />
+			</list>
+		</property>
+		<property name="autoStartup">
+			<value>false</value>
+		</property>
+	</bean>
+</beans>
