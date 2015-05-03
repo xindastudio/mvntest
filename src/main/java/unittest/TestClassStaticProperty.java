@@ -11,7 +11,7 @@ public class TestClassStaticProperty {
 		flag = true;
 		System.out.println(flag);
 		try {
-			Class.forName("TestClassStaticProperty");
+			Class.forName("unittest.TestClassStaticProperty");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
