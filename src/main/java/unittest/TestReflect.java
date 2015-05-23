@@ -19,12 +19,28 @@ import com.rabbitmq.client.ConnectionFactory;
  * 
  */
 public class TestReflect {
+	private Date date;
 	private List<Date> dates;
 	private Date[] dateArray;
 	private Map<String, Date> dateMap;
 	private ArrayList<Date> adates;
 	private HashMap<String, Date> hdateMap;
 	private Set<String> sets;
+
+	/**
+	 * @return the date
+	 */
+	public Date getDate() {
+		return date;
+	}
+
+	/**
+	 * @param date
+	 *            the date to set
+	 */
+	public void setDate(Date date) {
+		this.date = date;
+	}
 
 	/**
 	 * @return the dates
@@ -121,37 +137,34 @@ public class TestReflect {
 
 		try {
 			Method[] ms = TestReflect.class.getMethods();
+			Class<?> pt = null;
 			for (Method m : ms) {
 				if (m.getParameterTypes().length < 1
 						|| !m.getName().startsWith("set")) {
 					continue;
 				}
+				pt = m.getParameterTypes()[0];
 				System.out.println("method : " + m);
-				System.out.println("\tparameter type : "
-						+ m.getParameterTypes()[0]);
+				System.out.println("\tparameter type : " + pt);
 				System.out.println("\tparameter component type : "
-						+ m.getParameterTypes()[0].getComponentType());
-				if (m.getParameterTypes()[0].isArray()) {
+						+ pt.getComponentType());
+				if (pt.isArray()) {
 					System.out.println("\t\tcomponent type : "
-							+ (m.getParameterTypes()[0]).getComponentType());
-				} else if (Collection.class == (m.getParameterTypes()[0])
-						|| Collection.class.isAssignableFrom(m
-								.getParameterTypes()[0])
-						|| Map.class == (m.getParameterTypes()[0])
-						|| Map.class.isAssignableFrom(m.getParameterTypes()[0])) {
+							+ pt.getComponentType());
+				} else if (Collection.class.isAssignableFrom(pt)
+						|| Map.class.isAssignableFrom(pt)) {
 					Type[] ts = m.getGenericParameterTypes();
 					Type[] ats = null;
+					ParameterizedType pit = null;
 					for (int i = 0; i < ts.length; i++) {
 						if (ParameterizedType.class.isAssignableFrom(ts[i]
 								.getClass())) {
+							pit = (ParameterizedType) ts[i];
 							System.out.println("\t\towner type : "
-									+ ((Class<?>) (((ParameterizedType) ts[i])
-											.getOwnerType())));
+									+ ((Class<?>) (pit.getOwnerType())));
 							System.out.println("\t\traw type : "
-									+ ((Class<?>) (((ParameterizedType) ts[i])
-											.getRawType())));
-							ats = ((ParameterizedType) ts[i])
-									.getActualTypeArguments();
+									+ ((Class<?>) (pit.getRawType())));
+							ats = pit.getActualTypeArguments();
 							if (null == ats) {
 								continue;
 							}

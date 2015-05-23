@@ -13,6 +13,9 @@ public class TestInteger {
 		System.out.println(Integer.MAX_VALUE);
 		System.out.println(Integer.MAX_VALUE / 1024 / 1024);
 		equalsTest();
+		int i = -1;
+		Integer j = (Integer) i;
+		System.out.println(j);
 	}
 
 	/**

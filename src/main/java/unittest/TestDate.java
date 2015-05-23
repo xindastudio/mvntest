@@ -6,7 +6,7 @@ import java.util.Date;
 public class TestDate {
 
 	public static void main(String[] args) {
-		test2();
+		test1();
 	}
 
 	private static void test1() {
@@ -15,6 +15,8 @@ public class TestDate {
 		System.out.println(d1 instanceof java.util.Date);
 		System.out.println(new java.sql.Date(System.currentTimeMillis()));
 		System.out.println(new java.util.Date(1407148268193L));
+		java.util.Date d2 = new java.sql.Date(System.currentTimeMillis());
+		System.out.println(d2);
 	}
 
 	private static void test2() {

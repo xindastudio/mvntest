@@ -11,6 +11,10 @@ public class TestLong {
 		double j = 2.0;
 		System.out.println(i == j);
 		System.out.println(Double.parseDouble(new BigDecimal(2).toString()));
+		Long l = Long.MAX_VALUE;
+		System.out.println(l);
+		int m = l.intValue();
+		System.out.println(m);
 	}
 
 }
